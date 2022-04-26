@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  app:
+    init: true
+    container_name: nodejs-python
+    image: nodejs-python
+    build:
+        context: ./
+    volumes:
+    - ./src/:/work/src/
+    ports:
+      - 3000:3000
+      - 9229:9229
