@@ -24,7 +24,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release: ${{ github.ref }}
           replace: true
-          files: ${{ GITHUB_WORKSPACE }}/CHANGELOG.MD
+          files: CHANGELOG.MD
           message: "JED TEST REPLACE"
 
 # jobs:
