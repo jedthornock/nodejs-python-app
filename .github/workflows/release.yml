@@ -30,7 +30,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release: ${{ github.ref }}
           replace: true
-          files: ../../CHANGELOG.MD
+          files: CHANGELOG.md
           message: "JED TEST REPLACE"
 
 # jobs:
