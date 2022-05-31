@@ -1,8 +1,13 @@
+# on:
+#   release:
+#     type: published
+#     branches:    
+#       - 'master'
 on:
-  release:
-    type: published
-    branches:    
-      - 'master'
+  push:
+    # Pattern matched against refs/tags
+    tags:        
+      - '*'
 
 jobs:
   comment:
