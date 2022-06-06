@@ -15,14 +15,14 @@ jobs:
          export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
          wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
          mkdir artifacts
-         ./trivy image httpd:2.2-alpine > artifacts/trivy_results.out
+         ./trivy image httpd:2.2-alpine > artifacts/trivy_results.txt
          echo "artifactPath=artifacts/trivy_results.out" >> $GITHUB_ENV
-         echo ::set-output name=TRIVY_RESULTS::$(cat artifacts/trivy_results.out | grep Total:)
+         echo ::set-output name=TRIVY_RESULTS::$(cat artifacts/trivy_results.txt | grep Total:)
     - if: always()
       name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: trivy report
+        name: Trivy Results
         path: ${{ env.artifactPath }}
         
     - name: Add PR Comment
