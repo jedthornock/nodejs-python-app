@@ -1,7 +1,7 @@
 name: trivy
 
 on:
-  push:
+  pull_request:
     branches: master
 
 # env:
@@ -28,18 +28,37 @@ jobs:
          mkdir artifacts
          ./trivy image httpd:2.2-alpine > artifacts/trivy_results.out
          echo "artifactPath=artifacts/trivy_results.out" >> $GITHUB_ENV
-         echo ::set-output name=TRIVY_RESULTS::$(cat $RUNNER_WORKSPACE/trivy_results.out | grep Total:)
+         echo ::set-output name=TRIVY_RESULTS::$(cat artifacts/trivy_results.out | grep Total:)
     - name: show file
       run: |
          echo "Trivy Results"
          echo "-------------"
-         cat $RUNNER_WORKSPACE/trivy_results.out | grep Total: 
+         cat artifacts/trivy_results.out | grep Total: 
     - if: always()
       name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: trivy report
         path: ${{ env.artifactPath }}
+        
+    - name: Add PR Comment
+      env:
+        TRIVY_RESULTS: ${{ steps.trivy_scan.outputs.TRIVY_RESULTS }}
+      uses: mshick/add-pr-comment@v1
+      with:
+        message: |
+         echo "Trivy Results"
+         echo "-------------"
+         echo $TRIVY_RESULTS
+        
+       # A GitHub token for API access.
+       #repo-token: # optional
+       # A user login associated with your token, for temporary repo tokens this is `github-actions[bot]`.
+       #repo-token-user-login: # optional
+       # Allow messages to be repeated.
+       #allow-repeats: # optional, default is false
+       # Proxy URL for comment creation
+       #proxy-url: # optional
 # #     - name: print result
 #       env:
 #         TRIVY_RESULTS: ${{ steps.trivy_scan.outputs.TRIVY_RESULTS }}
