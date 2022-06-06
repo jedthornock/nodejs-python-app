@@ -22,7 +22,7 @@ jobs:
     - name: show file
       run: |
         echo "Trivy Results"
-        echo "-------------
+        echo "-------------"
         cat $RUNNER_WORKSPACE/trivy_results.out | grep Total: 
 #     - name: print result
 #       env:
