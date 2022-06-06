@@ -31,8 +31,8 @@ jobs:
       uses: mshick/add-pr-comment@v1
       with:
         message: |
-         Trivy Results
-         -------------
+         Trivy Scan Results
+         ------------------
          ${{ env.TRIVY_RESULTS }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
