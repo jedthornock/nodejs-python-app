@@ -29,11 +29,6 @@ jobs:
          ./trivy image httpd:2.2-alpine > artifacts/trivy_results.out
          echo "artifactPath=artifacts/trivy_results.out" >> $GITHUB_ENV
          echo ::set-output name=TRIVY_RESULTS::$(cat artifacts/trivy_results.out | grep Total:)
-    - name: show file
-      run: |
-         echo "Trivy Results"
-         echo "-------------"
-         cat artifacts/trivy_results.out | grep Total: 
     - if: always()
       name: Upload artifact
       uses: actions/upload-artifact@v2
@@ -47,9 +42,9 @@ jobs:
       uses: mshick/add-pr-comment@v1
       with:
         message: |
-         echo "Trivy Results"
-         echo "-------------"
-         echo $TRIVY_RESULTS
+         Trivy Results
+         -------------
+         ${{ env.TRIVY_RESULTS }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
        # A GitHub token for API access.
        #repo-token: # optional
