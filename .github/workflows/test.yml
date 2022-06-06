@@ -50,7 +50,7 @@ jobs:
          echo "Trivy Results"
          echo "-------------"
          echo $TRIVY_RESULTS
-        
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
        # A GitHub token for API access.
        #repo-token: # optional
        # A user login associated with your token, for temporary repo tokens this is `github-actions[bot]`.
