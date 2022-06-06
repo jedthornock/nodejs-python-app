@@ -18,7 +18,7 @@ jobs:
         export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
         wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
         ./trivy image httpd:2.2-alpine > $RUNNER_WORKSPACE/trivy_results.out
-        echo "${{ $RUNNER_WORKSPACE }}"
+        echo "${{ github.RUNNER_WORKSPACE }}"
         echo ::set-output name=TRIVY_RESULTS::$(cat $RUNNER_WORKSPACE/trivy_results.out | grep Total:)
     - name: show file
       run: |
