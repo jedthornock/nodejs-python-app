@@ -4,22 +4,11 @@ on:
   push:
     branches: master
 
-# env:
-#   TRIVY_RESULTS: ""
-
 jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-#     - run: | 
-#         mkdir artifacts
-#         echo "This is a file to upload" > artifacts/file.txt
-#         echo "artifactPath=artifacts/file.txt" >> $GITHUB_ENV
-#     - uses: actions/upload-artifact@v3
-#       with:
-#         name: artifact
-#         path: ${{ env.artifactPath }}
     - name: trivy scan
       id: trivy_scan 
       run: |
@@ -40,9 +29,6 @@ jobs:
       with:
         name: trivy report
         path: ${{ env.artifactPath }}
-# #     - name: print result
-#       env:
-#         TRIVY_RESULTS: ${{ steps.trivy_scan.outputs.TRIVY_RESULTS }}
-#       run: echo $TRIVY_RESULTS
+
       
         
