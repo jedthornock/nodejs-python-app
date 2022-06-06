@@ -24,6 +24,12 @@ jobs:
         echo "Trivy Results"
         echo "-------------"
         cat $RUNNER_WORKSPACE/trivy_results.out | grep Total: 
+    - if: always()
+      name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: trivy report
+        path: '$RUNNER_WORKSPACE/trivy_results.out'
 #     - name: print result
 #       env:
 #         TRIVY_RESULTS: ${{ steps.trivy_scan.outputs.TRIVY_RESULTS }}
