@@ -20,6 +20,7 @@ jobs:
         ./trivy image httpd:2.2-alpine > trivy_results.out
         echo ::set-output name=TRIVY_RESULTS::$(cat trivy_results.out | grep Total:)
         pwd
+        printenv
     - name: print result
       env:
         TRIVY_RESULTS: ${{ steps.trivy_scan.outputs.TRIVY_RESULTS }}
