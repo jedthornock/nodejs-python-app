@@ -4,22 +4,11 @@ on:
   pull_request:
     branches: master
 
-# env:
-#   TRIVY_RESULTS: ""
-
 jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-#     - run: | 
-#         mkdir artifacts
-#         echo "This is a file to upload" > artifacts/file.txt
-#         echo "artifactPath=artifacts/file.txt" >> $GITHUB_ENV
-#     - uses: actions/upload-artifact@v3
-#       with:
-#         name: artifact
-#         path: ${{ env.artifactPath }}
     - name: trivy scan
       id: trivy_scan 
       run: |
@@ -46,17 +35,6 @@ jobs:
          -------------
          ${{ env.TRIVY_RESULTS }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-       # A GitHub token for API access.
-       #repo-token: # optional
-       # A user login associated with your token, for temporary repo tokens this is `github-actions[bot]`.
-       #repo-token-user-login: # optional
-       # Allow messages to be repeated.
-       #allow-repeats: # optional, default is false
-       # Proxy URL for comment creation
-       #proxy-url: # optional
-# #     - name: print result
-#       env:
-#         TRIVY_RESULTS: ${{ steps.trivy_scan.outputs.TRIVY_RESULTS }}
-#       run: echo $TRIVY_RESULTS
+
       
         
