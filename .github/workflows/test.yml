@@ -1,41 +1,74 @@
-name: trivy
+name: Security_Scans
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ master ]
 
 jobs:
-  scan:
+  npm-audit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: trivy scan
-      id: trivy_scan 
-      run: |
-         export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-         wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
-         mkdir artifacts
-         ./trivy image httpd:2.2-alpine > artifacts/trivy_results.txt
-         echo "artifactPath=artifacts/trivy_results.txt" >> $GITHUB_ENV
-         echo ::set-output name=TRIVY_RESULTS::$(cat artifacts/trivy_results.txt | grep Total:)
-         printenv
-    - if: always()
-      name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: Trivy Results
-        path: ${{ env.artifactPath }}
+      - uses: actions/checkout@v3              
+      - name: NPM Scan
+        id: npm_scan
+        run: |
+          cd src
+          npm --version
+          npm i --package-lock-only 
+          npm install -g npm-audit-html
+          npm audit --json | npm-audit-html --output npm-scan-report.html 
+          echo "artifactPath=$GITHUB_WORKSPACE/src/npm-scan-report.html" >> $GITHUB_ENV
+          echo ::set-output name=NPM_RESULTS::$(npm audit | grep vulnerabilities)
+      - if: always()
+        name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: NPM Report
+          path: ${{ env.artifactPath }}
+      - run: echo "NPM_RESULTS = ${{ steps.npm_scan.outputs.NPM_RESULTS }}"
+      - run: echo "artifactPath = ${{ env.artifactPath }}"
+      - name: Add PR Comment
+        env:
+           NPM_RESULTS: ${{ steps.npm_scan.outputs.NPM_RESULTS }}
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            NPM Scan Results
+            ----------------
+            ${{ env.NPM_RESULTS }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+  # scan:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: trivy scan
+  #     id: trivy_scan 
+  #     run: |
+  #        export TRIVY_VERSION=$(wget -qO - "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+  #        wget --no-verbose https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz -O - | tar -zxvf -
+  #        mkdir artifacts
+  #        ./trivy image httpd:2.2-alpine > artifacts/trivy_results.txt
+  #        echo "artifactPath=artifacts/trivy_results.txt" >> $GITHUB_ENV
+  #        echo ::set-output name=TRIVY_RESULTS::$(cat artifacts/trivy_results.txt | grep Total:)
+  #        printenv
+  #   - if: always()
+  #     name: Upload artifact
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: Trivy Results
+  #       path: ${{ env.artifactPath }}
         
-    - name: Add PR Comment
-      env:
-        TRIVY_RESULTS: ${{ steps.trivy_scan.outputs.TRIVY_RESULTS }}
-      uses: mshick/add-pr-comment@v1
-      with:
-        message: |
-         Trivy Scan Results
-         ------------------
-         ${{ env.TRIVY_RESULTS }}
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+  #   - name: Add PR Comment
+  #     env:
+  #       TRIVY_RESULTS: ${{ steps.trivy_scan.outputs.TRIVY_RESULTS }}
+  #     uses: mshick/add-pr-comment@v1
+  #     with:
+  #       message: |
+  #        Trivy Scan Results
+  #        ------------------
+  #        ${{ env.TRIVY_RESULTS }}
+  #       repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       
         
