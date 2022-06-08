@@ -15,7 +15,7 @@ jobs:
           cd src
           npm --version
           npm i --package-lock-only 
-          npm i npm-audit-html@2.0.0-beta.2
+          npm install -g npm-audit-html@beta
           npm audit --json | npm-audit-html --output npm-scan-report.html 
           echo "artifactPath=$GITHUB_WORKSPACE/src/npm-scan-report.html" >> $GITHUB_ENV
           echo ::set-output name=NPM_RESULTS::$(npm audit | grep vulnerabilities)
