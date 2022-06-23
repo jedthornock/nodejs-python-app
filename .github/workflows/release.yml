@@ -28,7 +28,6 @@ jobs:
           message: "JED TEST REPLACE"
       - name: Display GitHub Var
         run: |
-          echo ${{ GITHUB_REF_NAME }}
           echo ${{ env.TAG }}
 
 # jobs:
