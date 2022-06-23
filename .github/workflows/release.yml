@@ -18,6 +18,8 @@ jobs:
       - name: Display GitHub Var
         run: |
           echo ${{github.ref_name}}
+          echo ${{ github.event.release.name }}
+          echo ${{ github.event.release.body }}
 
 # jobs:
 #   build:
