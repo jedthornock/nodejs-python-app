@@ -1,10 +1,10 @@
 on:
   release:
-    type: published
-    branches:    
-      - 'master'
+    types: [published]
 
-      
+env:
+  TAG: $GITHUB_REF_NAME
+  
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -26,6 +26,10 @@ jobs:
           replace: true
           files: CHANGELOG.md
           message: "JED TEST REPLACE"
+      - name: Display GitHub Var
+        run: |
+          echo ${{ GITHUB_REF_NAME }}
+          echo ${{ env.TAG }}
 
 # jobs:
 #   build:
