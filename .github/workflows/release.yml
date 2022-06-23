@@ -18,17 +18,9 @@ jobs:
         run: pwd
       - name: List Directory
         run: ls -ltr
-      - name: Update release
-        uses: IsaacShelton/update-existing-release@v1.2.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release: ${{ env.GITHUB_REF_NAME }}
-          replace: true
-          files: CHANGELOG.md
-          message: "JED TEST REPLACE"
       - name: Display GitHub Var
         run: |
-          echo ${{ env.TAG }}
+          echo ${{ github.ref.name }}
 
 # jobs:
 #   build:
