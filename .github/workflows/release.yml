@@ -2,9 +2,6 @@ on:
   release:
     types: [published]
 
-env:
-  TAG: ${{ github.ref.name }}
-  
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -20,7 +17,8 @@ jobs:
         run: ls -ltr
       - name: Display GitHub Var
         run: |
-          echo ${{ github.ref.name }}
+          echo "${{ github.ref }}"
+          echo "${{ github.ref.name }}"
 
 # jobs:
 #   build:
