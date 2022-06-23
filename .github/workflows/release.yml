@@ -17,7 +17,7 @@ jobs:
         run: ls -ltr
       - name: Display GitHub Var
         run: |
-          echo ${{github.ref_name}}
+          echo ${{github.ref_name}}-win
           echo ${{ github.event.release.name }}
           echo ${{ github.event.release.body }}
 
